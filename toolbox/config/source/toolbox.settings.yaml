@@ -11,4 +11,8 @@ tools:
     from:
     - config.libraries
     cmd: test
+  config:
+    from:
+    - config.libraries
+    cmd: config
 

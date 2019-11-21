@@ -3,6 +3,8 @@
 
 steps:
 - script: |
+    git config --global user.email "toolbox@toolbox.com"
+    git config --global user.name "Toolbox"
     docman init .docroot git@github.com:aroq/toolbox-docman-example.git
     cd .docroot
     docman build git_target staging

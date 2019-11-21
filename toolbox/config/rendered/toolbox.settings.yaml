@@ -100,6 +100,18 @@ tools:
     tool_dirs:
     - toolbox/.toolbox/deps/toolbox
     - toolbox/.toolbox/deps/toolbox-cicd-build
+  config:
+    cmd: config
+    env:
+      TOOLBOX_DOCKER_SSH_FORWARD: false
+      TOOLBOX_RUN_VARIANT: true
+    from: []
+    from_processed:
+    - config.libraries
+    image: aroq/toolbox
+    prefix: .toolbox
+    tool_dirs:
+    - toolbox/.toolbox/deps/toolbox
   initialize:
     cmd: initialize
     destination: toolbox

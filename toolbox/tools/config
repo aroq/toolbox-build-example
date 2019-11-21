@@ -1,0 +1,32 @@
+#!/usr/bin/env variant
+# vi: ft=yaml
+
+tasks:
+  core:
+    import: toolbox/.toolbox/deps/toolbox/variant-lib/utils.yaml
+
+tasks:
+  process:
+    parameters:
+    - name: config_source_dir
+      type: string
+      default: toolbox/config/source
+    - name: config_rendered_dir
+      type: string
+      default: toolbox/config/rendered
+    - name: config_filename
+      type: string
+      default: config.yaml
+
+    tasks:
+    steps:
+    - task: core.config.process.dir
+
+    - task: core.exec
+      arguments:
+        title: Render config files
+        cmd: |
+          gomplate \
+            -d core="{{ .config_rendered_dir }}/{{ .config_filename }}" \
+            --file=toolbox/templates/config.yaml \
+            --out=config.yaml

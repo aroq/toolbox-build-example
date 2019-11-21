@@ -1,8 +1,9 @@
 ---
 from_processed:
 - env:UNICONF
-- project:/toolbox/config/source/config.yaml
+- project:/toolbox/config/source/build.yaml
 - env:UNICONF
+repo: git@github.com:aroq/toolbox-docman-example.git
 sources:
   env:
     type: env
