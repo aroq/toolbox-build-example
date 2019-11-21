@@ -22,11 +22,11 @@ tasks:
     steps:
     - task: core.config.process.dir
 
-    - task: core.exec
-      arguments:
-        title: Render config files
-        cmd: |
-          gomplate \
-            -c .="{{ .config_rendered_dir }}/build.yaml" \
-            --file=toolbox/templates/config.yaml \
-            --out=config.yaml
+    # - task: core.exec
+      # arguments:
+        # title: Render config files
+        # cmd: |
+          # gomplate \
+            # -c .="{{ .config_rendered_dir }}/build.yaml" \
+            # --file=toolbox/templates/config.yaml \
+            # --out=config.yaml

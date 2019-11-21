@@ -1,0 +1,90 @@
+---
+components:
+  master:
+    hooks:
+      builder:
+        after_execute:
+        - environments:
+          - dev
+          - stage
+          - preprod
+          - prod
+          type: :yaml_execute
+        - commands:
+          - git rev-parse --short HEAD > REVISION
+          environments:
+          - local
+          - dev
+          - stage
+          - preprod
+          - prod
+          type: :yaml_execute
+    repo: git@github.com:aroq/toolbox-docman-example.git
+    root_repo: git@github.com:aroq/toolbox-docman-example.git
+    root_repo_states:
+      development:
+        type: branch
+        version: deliverables_develop
+      stable:
+        type: branch
+        version: deliverables_stable
+      staging:
+        type: branch
+        version: deliverables_staging
+    states:
+      development:
+        type: branch
+        version: develop
+      stable:
+        source:
+          branch: state_stable
+          file: info.yaml
+          repo: :project_repo
+          type: :retrieve_from_repo
+      staging:
+        type: branch
+        version: master
+    status: enabled
+    type: root_chain
+deploy_targets:
+  git_target:
+    states:
+      development: dev
+      stable: prod
+      staging: stage
+  local:
+    states:
+      development: local
+  striped:
+    states:
+      development: local
+environments:
+  dev:
+    deploy_target: git_target
+    state: development
+  preprod:
+    deploy_target: git_target
+    state: stable
+    tagger:
+      enabled: true
+      handler: :components
+  prod:
+    deploy_target: git_target
+    state: stable
+    tagger:
+      enabled: true
+      handler: :components
+  stage:
+    deploy_target: git_target
+    state: staging
+from_processed:
+- env:UNICONF
+- project:/toolbox/config/source/config.yaml
+- env:UNICONF
+sources:
+  env:
+    type: env
+  project:
+    path: ""
+    type: file
+
