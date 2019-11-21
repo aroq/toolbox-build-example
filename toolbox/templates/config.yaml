@@ -1,7 +1,7 @@
 components:
   master:
-    root_repo: git@github.com:aroq/toolbox-docman-example.git
-    repo: git@github.com:aroq/toolbox-docman-example.git
+    root_repo: {{ .repo }}
+    repo: {{ .repo }}
     status: enabled
     type: root_chain
     root_repo_states:

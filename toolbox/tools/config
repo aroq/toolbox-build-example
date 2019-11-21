@@ -27,6 +27,6 @@ tasks:
         title: Render config files
         cmd: |
           gomplate \
-            -d core="{{ .config_rendered_dir }}/{{ .config_filename }}" \
+            -c .="{{ .config_rendered_dir }}/build.yaml" \
             --file=toolbox/templates/config.yaml \
             --out=config.yaml
