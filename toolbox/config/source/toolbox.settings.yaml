@@ -1,14 +1,7 @@
 deps:
-  toolbox: github.com/aroq/toolbox?ref=develop
+  toolbox: github.com/aroq/toolbox?ref=master
   toolbox-cicd-build: github.com/aroq/toolbox-cicd-build?ref=master
 
 from:
 - toolbox/.toolbox/deps/toolbox/config/toolbox.settings.yaml
 - toolbox/.toolbox/deps/toolbox-cicd-build/config/toolbox.settings.yaml
-
-tools:
-  config:
-    from:
-    - config.libraries
-    cmd: config
-

@@ -62,3 +62,6 @@ tools:
     from: config.libraries.toolbox.commands.template
   uniconf:
     from: config.libraries.toolbox.commands.uniconf
+  config:
+    from: config.libraries.toolbox.commands.config
+    cmd: config

@@ -10,7 +10,7 @@ tasks:
       default: ""
     - name: title
       type: string
-      default: "CMD"
+      default: "Shell command"
     - name: cmd
       type: string
       default: "pwd"
@@ -29,7 +29,7 @@ tasks:
           CMD={{ list .flags .cmd | join " " | trimSuffix "\n" | trim | quote | replace "\\n" "\n" }}
 
           if [ "{{.verbose}}" = "true" ]; then
-            MESSAGE="---> {{ .title }} :: Executing command:"
+            MESSAGE="---> {{ .title }}:"
             echo -e "\033[0;34m${MESSAGE}\033[0m"
           fi
 

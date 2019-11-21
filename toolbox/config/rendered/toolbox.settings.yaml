@@ -67,7 +67,7 @@ config:
         destination: toolbox
         source: github.com/aroq/toolbox//tools
 deps:
-  toolbox: github.com/aroq/toolbox?ref=develop
+  toolbox: github.com/aroq/toolbox?ref=master
   toolbox-cicd-build: github.com/aroq/toolbox-cicd-build?ref=master
 from_processed:
 - toolbox/.toolbox/deps/toolbox/config/toolbox.settings.yaml
@@ -104,14 +104,15 @@ tools:
     - toolbox/.toolbox/deps/toolbox-cicd-build
   config:
     cmd: config
+    destination: toolbox
     env:
       TOOLBOX_DOCKER_SSH_FORWARD: false
       TOOLBOX_RUN_VARIANT: true
-    from: []
     from_processed:
-    - config.libraries
+    - config.libraries.toolbox.commands.config
     image: aroq/toolbox
     prefix: .toolbox
+    source: github.com/aroq/toolbox//tools
     tool_dirs:
     - toolbox/.toolbox/deps/toolbox
   initialize:

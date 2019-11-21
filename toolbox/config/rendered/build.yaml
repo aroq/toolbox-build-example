@@ -3,7 +3,7 @@ build:
   repo: git@github.com:aroq/toolbox-docman-example.git
 from_processed:
 - env:UNICONF
-- project:/toolbox/config/source/cicd.component.build.yaml
+- project:/toolbox/config/source/build.yaml
 - env:UNICONF
 sources:
   env:

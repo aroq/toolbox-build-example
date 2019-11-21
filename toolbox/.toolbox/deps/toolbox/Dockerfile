@@ -31,5 +31,14 @@ RUN apk add --no-cache --update $(grep -v '^#' /etc/apk/packages.txt)
 # Add git-secret package from edge testing
 RUN apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing git-secret
 
+# Install fd
+ENV FD_VERSION 7.4.0
+RUN curl --fail -sSL -o fd.tar.gz https://github.com/sharkdp/fd/releases/download/v${FD_VERSION}/fd-v${FD_VERSION}-x86_64-unknown-linux-musl.tar.gz \
+    && tar -zxf fd.tar.gz \
+    && cp fd-v${FD_VERSION}-x86_64-unknown-linux-musl/fd /usr/local/bin/ \
+    && rm -f fd.tar.gz \
+    && rm -fR fd-v${FD_VERSION}-x86_64-unknown-linux-musl \
+    && chmod +x /usr/local/bin/fd
+
 RUN mkdir -p /usr/toolbox/deps/toolbox
 COPY ./* /usr/toolbox/deps/toolbox

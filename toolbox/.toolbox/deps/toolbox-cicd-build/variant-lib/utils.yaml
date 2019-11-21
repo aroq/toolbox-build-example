@@ -20,7 +20,7 @@ tasks:
         cmd: |
           git config --global user.email "{{ .user_email }}"
           git config --global user.name "{{ .user_name }}"
-          docman init {{ .repo }}
+          docman init .docroot {{ .repo }} -f
           cd .docroot
           docman build git_target {{ .state }}
 
