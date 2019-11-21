@@ -57,3 +57,26 @@ deploy_targets:
       development: dev
       staging: stage
       stable: prod
+
+environments:
+  dev:
+    state: development
+    deploy_target: git_target
+
+  stage:
+    state: staging
+    deploy_target: git_target
+
+  preprod:
+    state: stable
+    deploy_target: git_target
+    tagger:
+      enabled: true
+      handler: :components
+
+  prod:
+    state: stable
+    deploy_target: git_target
+    tagger:
+      enabled: true
+      handler: :components
