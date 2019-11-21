@@ -5,5 +5,5 @@ steps:
 - script: |
     docman init .docroot git@github.com:aroq/toolbox-docman-example.git
     cd .docroot
-    docman build local development
+    docman build git_target staging
 

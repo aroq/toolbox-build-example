@@ -20,7 +20,7 @@ components:
         version: develop
       staging:
         type: branch
-        version: staging
+        version: master
       stable:
         source:
           type: :retrieve_from_repo
