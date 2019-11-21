@@ -1,11 +1,28 @@
 #!/usr/bin/env variant
 # vi: ft=yaml
 
-steps:
-- script: |
-    git config --global user.email "toolbox@toolbox.com"
-    git config --global user.name "Toolbox"
-    docman init .docroot git@github.com:aroq/toolbox-docman-example.git
-    cd .docroot
-    docman build git_target staging
-
+tasks:
+  core:
+    import: toolbox/.toolbox/deps/toolbox/variant-lib/utils.yaml
+  utils:
+    tasks:
+      build:
+        import: toolbox/.toolbox/deps/toolbox-cicd-build/variant-lib/utils.yaml
+  build:
+    parameters:
+    - name: repo
+      type: string
+      default: git@github.com:aroq/toolbox-docman-example.git
+    tasks:
+      development:
+        steps:
+        - task: utils.build.deliverables
+          arguments:
+            repo: "{{ .repo }}"
+            state: development
+      staging:
+        steps:
+        - task: utils.build.deliverables
+          arguments:
+            repo: "{{ .repo }}"
+            state: staging

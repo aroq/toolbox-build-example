@@ -1,7 +1,5 @@
 components:
   master:
-    root_repo: {{ .repo }}
-    repo: {{ .repo }}
     status: enabled
     type: root_chain
     root_repo_states:
@@ -27,24 +25,7 @@ components:
           repo: :project_repo
           branch: state_stable
           file: info.yaml
-    hooks:
-      builder:
-        after_execute:
-          - type: :yaml_execute
-            environments: [dev, stage, preprod, prod]
-            # commands:
-              # - "rm -f .gitignore"
-              # - "cp -f .gitignore.docroot .gitignore"
-          - type: :yaml_execute
-            environments: [local, dev, stage, preprod, prod]
-            commands:
-              - git rev-parse --short HEAD > REVISION
-              # - "composer install --prefer-dist --optimize-autoloader"
-              # - "if [[ -d vendor ]]; then find vendor -type d -name .git -exec rm -rf {} +; fi"
-              # - "if [[ -d docroot/modules/contrib ]]; then find docroot/modules/contrib -type d -name .git -exec rm -rf {} +; fi"
-              # - "if [[ -d docroot/themes/contrib ]]; then find docroot/themes/contrib -type d -name .git -exec rm -rf {} +; fi"
-              # - "if [[ -d docroot/libraries ]]; then find docroot/libraries -type d -name .git -exec rm -rf {} +; fi"
-
+          
 deploy_targets:
   local:
     states:

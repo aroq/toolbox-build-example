@@ -1,0 +1,25 @@
+#!/usr/bin/env variant
+# vi: ft=yaml
+
+tasks:
+  deliverables:
+    parameters:
+    - name: repo
+      type: string
+    - name: state
+      type: string
+    - name: user_email
+      type: string
+      default: "toolbox@toolbox.com"
+    - name: user_name
+      type: string
+      default: "Toolbox"
+    steps:
+    - task: core.exec
+      arguments:
+        cmd: |
+          git config --global user.email "{{ .user_email }}"
+          git config --global user.name "{{ .user_name }}"
+          docman init {{ .repo }}
+          cd .docroot
+          docman build git_target {{ .state }}

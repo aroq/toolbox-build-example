@@ -73,10 +73,11 @@ tasks:
             - task: core.exec
               arguments:
                 cmd: |
+                  set -e
                   # Process config
                   rm -fR {{ .TOOLBOX_CONFIG_RENDERED_DIR }}
                   mkdir -p {{ .TOOLBOX_CONFIG_RENDERED_DIR }}
-                  fd -0 "^*.y.?ml" {{ .TOOLBOX_CONFIG_SOURCE_DIR }} -x sh -c "uniconf -c {{ .TOOLBOX_CONFIG_SOURCE_DIR }}/{/} > toolbox/config/rendered/{/} 2> /dev/null";
+                  fd -0 "^*.y.?ml" {{ .TOOLBOX_CONFIG_SOURCE_DIR }} -x sh -c "uniconf -c {{ .TOOLBOX_CONFIG_SOURCE_DIR }}/{/} > toolbox/config/rendered/{/}";
           path:
             parameters:
             - name: dir

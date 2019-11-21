@@ -78,6 +78,7 @@ environments:
     deploy_target: git_target
     state: staging
 from_processed:
+- toolbox/.toolbox/deps/toolbox-cicd-build/config/build.deliverables.yaml
 - env:UNICONF
 - project:/toolbox/config/source/config.yaml
 - env:UNICONF

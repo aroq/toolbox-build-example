@@ -7,10 +7,6 @@ from:
 - toolbox/.toolbox/deps/toolbox-cicd-build/config/toolbox.settings.yaml
 
 tools:
-  test:
-    from:
-    - config.libraries
-    cmd: test
   config:
     from:
     - config.libraries
