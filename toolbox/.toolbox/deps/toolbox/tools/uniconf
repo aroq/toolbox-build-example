@@ -1,7 +1,7 @@
 #!/usr/bin/env variant
 # vi: ft=yaml
 
-import: toolbox/.toolbox/deps/toolbox/variant-lib/utils.yaml
+import: .toolbox/core/variant-lib/utils.yaml
 
 description: Uniconf tasks
 

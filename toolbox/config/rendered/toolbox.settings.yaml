@@ -38,6 +38,7 @@ config:
         destination: cicd
         env:
           TOOLBOX_DOCKER_SSH_FORWARD: true
+          VARIANT_CONFIG_DIR: toolbox/config/rendered/
         image: aroq/variant-cicd
         source: github.com/aroq/toolbox-cicd
     params:
@@ -91,6 +92,7 @@ tools:
     env:
       TOOLBOX_DOCKER_SSH_FORWARD: true
       TOOLBOX_RUN_VARIANT: true
+      VARIANT_CONFIG_DIR: toolbox/config/rendered/
     from: []
     from_processed:
     - config.libraries.cicd.component.commands.build
@@ -136,18 +138,6 @@ tools:
     image: aroq/toolbox
     prefix: .toolbox
     source: github.com/aroq/toolbox//tools
-    tool_dirs:
-    - toolbox/.toolbox/deps/toolbox
-  test:
-    cmd: test
-    env:
-      TOOLBOX_DOCKER_SSH_FORWARD: false
-      TOOLBOX_RUN_VARIANT: true
-    from: []
-    from_processed:
-    - config.libraries
-    image: aroq/toolbox
-    prefix: .toolbox
     tool_dirs:
     - toolbox/.toolbox/deps/toolbox
   toolbox:

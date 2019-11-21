@@ -4,6 +4,8 @@ config:
       params:
         config_context_prefix:
         - cicd
+        env:
+          VARIANT_CONFIG_DIR: toolbox/config/rendered/
       component:
         params:
           source: github.com/aroq/toolbox-cicd-build

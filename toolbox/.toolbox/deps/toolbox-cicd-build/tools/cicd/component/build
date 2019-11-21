@@ -12,7 +12,6 @@ tasks:
     parameters:
     - name: repo
       type: string
-      default: git@github.com:aroq/toolbox-docman-example.git
     tasks:
       development:
         steps:
@@ -26,3 +25,4 @@ tasks:
           arguments:
             repo: "{{ .repo }}"
             state: staging
+
