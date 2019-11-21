@@ -1,0 +1,7 @@
+#!/usr/bin/env variant
+# vi: ft=yaml
+
+steps:
+- script: |
+    echo "test"
+    docman --version

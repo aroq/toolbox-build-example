@@ -1,0 +1,112 @@
+#!/usr/bin/env variant
+# vi: ft=yaml
+
+description: Toolbox management tasks
+
+parameters:
+- name: TOOLBOX_DIR
+  default: toolbox/.toolbox
+- name: TOOLBOX_PROJECT_DIR
+  default: toolbox
+- name: TOOLBOX_SETTINGS_FILE_NAME
+  default: toolbox.settings.yaml
+- name: TOOLBOX_EXECUTABLES_DIR
+  default: toolbox/bin
+
+tasks:
+  core:
+    import: toolbox/.toolbox/deps/toolbox/variant-lib/utils.yaml
+  deps:
+    tasks:
+      install:
+        steps:
+        - task: core.exec
+          arguments:
+            title: Install deps
+            cmd: |
+              # set -e
+              rm -fR toolbox/.toolbox/.tmp/deps
+
+              # Process config
+              uniconf -c {{ .TOOLBOX_PROJECT_DIR }}/config/source/{{ .TOOLBOX_SETTINGS_FILE_NAME }} 2> /dev/null > {{ .TOOLBOX_PROJECT_DIR }}/config/rendered/{{ .TOOLBOX_SETTINGS_FILE_NAME }};
+
+              mkdir -p ~/.ssh && echo "Host *" > ~/.ssh/config && echo " StrictHostKeyChecking no" >> ~/.ssh/config
+
+              # Retrieve deps
+              yq r {{ .TOOLBOX_PROJECT_DIR }}/config/rendered/{{ .TOOLBOX_SETTINGS_FILE_NAME }} -j | jq -r '.deps | to_entries | . [] | @text "\(.value) toolbox/.toolbox/.tmp/deps/\(.key)"' | xargs -n2 go-getter;
+
+              # Update revisions
+              yq r {{ .TOOLBOX_PROJECT_DIR }}/config/rendered/{{ .TOOLBOX_SETTINGS_FILE_NAME }} -j | \
+              jq -r '.deps | to_entries | . [] | @text "toolbox/.toolbox/.tmp/deps/\(.key)"' | \
+              xargs -I "%" \
+                sh -c "cd %; [ -d .git ] && (git rev-parse --short HEAD > REVISION; rm -fR .git)" || true;
+
+              # Replace old deps
+              rm -fR toolbox/.toolbox/deps
+              cp -fR toolbox/.toolbox/.tmp/deps toolbox/.toolbox
+              rm -fR toolbox/.toolbox/.tmp/deps
+
+      list:
+        steps:
+        - task: core.exec
+          arguments:
+            cmd: |
+              uniconf -c {{ .TOOLBOX_PROJECT_DIR }}/config/source/{{ .TOOLBOX_SETTINGS_FILE_NAME }} 2> /dev/null > {{ .TOOLBOX_PROJECT_DIR }}/config/rendered/{{ .TOOLBOX_SETTINGS_FILE_NAME }};
+
+              # List tools
+              yq r {{ .TOOLBOX_PROJECT_DIR }}/config/rendered/{{ .TOOLBOX_SETTINGS_FILE_NAME }} -j | jq -r '.deps';
+
+  cmd:
+    tasks:
+      create:
+        steps:
+        - task: core.config.process.dir
+
+        - task: core.exec
+          arguments:
+            cmd: |
+              # Remove and recreate bin dir
+              rm -fR toolbox/.toolbox/.tmp/bin;
+              mkdir -p toolbox/.toolbox/.tmp/bin;
+
+              # Create bin dirs hierarchy
+              yq r {{ .TOOLBOX_PROJECT_DIR }}/config/rendered/{{ .TOOLBOX_SETTINGS_FILE_NAME }} -j | \
+                jq -r '.tools | to_entries | .[] | select(.key | contains("/")) | .key | capture("(?<dir>.*)\/.*") | .dir' | \
+                xargs -I "%" \
+                  sh -c "mkdir -p toolbox/.toolbox/.tmp/bin/%"
+
+              # Create "bin/*" tool executable scripts
+              yq r {{ .TOOLBOX_PROJECT_DIR }}/config/rendered/{{ .TOOLBOX_SETTINGS_FILE_NAME }} -j | \
+                jq -r '.tools | to_entries | .[] | .key' | \
+                xargs -I "%" \
+                  sh -c "yq r {{ .TOOLBOX_PROJECT_DIR }}/config/rendered/{{ .TOOLBOX_SETTINGS_FILE_NAME }} -j | jq '.tools | .[\"%\"]' | gomplate -f {{ .TOOLBOX_DIR }}/deps/toolbox/templates/bin/run.tpl -o toolbox/.toolbox/.tmp/bin/% --context task=stdin:///foo.yml; chmod a+x toolbox/.toolbox/.tmp/bin/%";
+
+              # Remove tmp dir
+              rm -fR .unipipe_temp;
+
+              # Replace old deps
+              rm -fR toolbox/bin
+              cp -fR toolbox/.toolbox/.tmp/bin toolbox
+              rm -fR toolbox/.toolbox/.tmp/bin
+
+      list:
+        steps:
+        - task: core.exec
+          arguments:
+            cmd: |
+              # List "bin/*" tool executable scripts
+              yq r {{ .TOOLBOX_DIR }}/{{ .TOOLBOX_SETTINGS_FILE_NAME }} -j | \
+                jq -r '.tools'
+
+      show:
+        parameters:
+        - name: tool_name
+          type: string
+        steps:
+        - task: core.exec
+          arguments:
+            cmd: |
+              # Show command definition
+              yq r {{ .TOOLBOX_DIR }}/{{ .TOOLBOX_SETTINGS_FILE_NAME }} -j | \
+                jq -r '.tools.{{ .tool_name }}'
+

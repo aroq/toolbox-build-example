@@ -1,0 +1,16 @@
+#!/usr/bin/env variant
+# vi: ft=yaml
+
+import: toolbox/.toolbox/deps/toolbox/variant-lib/utils.yaml
+
+description: Uniconf tasks
+
+parameters:
+- name: TOOLBOX_UNICONF_CONFIG_FILE
+  default: config/defines.yaml
+
+steps:
+- task: exec
+  arguments:
+    cmd: |
+      uniconf -c {{ .TOOLBOX_UNICONF_CONFIG_FILE }}

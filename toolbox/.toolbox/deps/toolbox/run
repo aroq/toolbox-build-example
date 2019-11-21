@@ -1,0 +1,67 @@
+#!/usr/bin/env bash
+
+# Disable the includes checking in spellcheck:
+# shellcheck disable=SC1091
+
+if [ "${TOOLBOX_DEBUG}" == "true" ]; then
+  set -x
+fi
+
+CMD=${1}
+export TOOLBOX_TOOL_DOCKER_IMAGE=${TOOLBOX_TOOL_DOCKER_IMAGE:-$2}
+# TOOLBOX_DIR_PREFIX=${TOOLBOX_DIR_PREFIX:-.toolbox}
+# TOOLBOX_PROJECT_DIR_PREFIX=${PROJECT_TOOLBOX_DIR_PREFIX:-toolbox}
+
+# echo "CMD: ${CMD}"
+
+# echo "TOOLBOX_RUN: ${TOOLBOX_RUN}"
+# echo "TOOLBOX_DOCKER_SKIP before: ${TOOLBOX_DOCKER_SKIP}"
+
+if [ -z ${TOOLBOX_RUN+x} ] && [ -z ${TOOLBOX_DOCKER_SKIP+x} ]; then
+  # echo "TOOLBOX_RUN & TOOLBOX_RUN_DIRECT are not provided"
+  export TOOLBOX_RUN=false
+  export TOOLBOX_DOCKER_SKIP=false
+  if [ -f /.dockerenv ]; then
+    echo "Inside docker already, setting TOOLBOX_DOCKER_SKIP to true"
+    export TOOLBOX_DOCKER_SKIP=true
+  fi
+fi
+
+# echo "TOOLBOX_DOCKER_SKIP after: ${TOOLBOX_DOCKER_SKIP}"
+
+# Load environment variables from .env file
+if [[ -f ".env" ]]; then
+  source ".env"
+fi
+
+# Load environment variables from  local git-ignored .env.local file
+if [[ -f ".env.local" ]]; then
+  source ".env.local"
+fi
+
+for i in $(echo "$TOOLBOX_TOOL_DIRS" | sed "s/,/ /g")
+do
+  echo "$i/${CMD}"
+  if [[ -f "${i}/${CMD}" ]]; then
+    TOOL_PATH="${i}/${CMD}"
+    echo "${TOOL_PATH}"
+    break
+  fi
+done
+
+# Remove the first argument
+shift
+
+export TOOLBOX_RUN=true
+
+# Replace "=" by " " in args to make sure Make is not trying to process them
+ARGS=$(echo "$*" | tr '=' ' ')
+
+if [ -z "${TOOL_PATH}" ]; then
+  echo "Tool ${CMD} is not found"
+else
+  echo "make ${TOOL_PATH} -- ${ARGS}"
+  eval "make ${TOOL_PATH} -- ${ARGS}"
+fi
+
+

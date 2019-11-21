@@ -1,0 +1,62 @@
+Version 0.1.4:
+ - Update uniconf version to 0.1.7
+ - Update README about sample project
+ - Add test tool folder
+ - Formatting
+ - Add toolbox init task
+ - Move k6 config to toolbox-k6 repo
+
+Version 0.1.3:
+ - Refactor code
+
+Version 0.1.2:
+ - Update tools versions
+ - Fix SSH FORWARD for docker
+ - Add TOOLBOX_DOCKER_SSH_FORWARD env var
+ - Switch to aroq/toolbox:dev version
+ - Change toolbox image to aroq/toolbox:0.1.1
+ - Change vars retrieve image to aroq/toolbox:0.1.1
+ - Change vars retrieve image to aroq/toolbox:0.1.4
+
+Version 0.1.1:
+
+
+Version 0.1.0
+ - Move go-getter build our of this project
+ - Move uniconf build info uniconf project
+ - Fix default toolbox image name
+ - Update default toolbox tool settings
+ - Add default toolbox tool into settings
+ - Add toolbox test cmd
+ - Add README.md
+ - Add .toolbox.makefile.init init helper
+ - Formatting changes
+ - Rename TOOLBOX_RUN_DIRECT to TOOLBOX_DOCKER_SKIP
+ - Update TOOLBOX_RUN_DIRECT logic
+ - Updates
+ - Change TOOLBOX_RUN_DIRECT handling
+ - Refactor
+ - Update docker image to aroq/variant-cicd
+ - Update docker image to michaeltigr/zebra-build-php-drush-docman:0.0.107
+ - Change release build cmd
+ - Updates
+ - Refactor toolbox tasks
+ - Add toolbox cmd
+ - Add config dir
+ - Update deps init function
+ - Add uniconf tool
+ - Change IMAGE env var handling
+ - Update run wrapper
+ - Fix conflict
+ - Add gomplate
+ - Update .tools.settings yaml format
+ - Change 'deps' to tools in .toolbox.settings
+ - Trigger
+ - Trigger
+ - Trigger
+ - Add VERSION arg in dockerfile
+ - Add dockerfile
+ - Update install procedure
+ - Update install procedure
+ - Initial commit
+

@@ -1,0 +1,59 @@
+components:
+  master:
+    root_repo: git@code.adyax.com:zebra/example-single-config-standalone.git
+    repo: git@code.adyax.com:zebra/example-single-config-standalone.git
+    status: enabled
+    type: root_chain
+    root_repo_states:
+      development:
+        type: branch
+        version: deliverables_develop
+      staging:
+        type: branch
+        version: deliverables_staging
+      stable:
+        type: branch
+        version: deliverables_stable
+    states:
+      development:
+        type: branch
+        version: develop
+      staging:
+        type: branch
+        version: staging
+      stable:
+        source:
+          type: :retrieve_from_repo
+          repo: :project_repo
+          branch: state_stable
+          file: info.yaml
+    hooks:
+      builder:
+        after_execute:
+          - type: :yaml_execute
+            environments: [dev, stage, preprod, prod]
+            commands:
+              - "rm -f .gitignore"
+              - "cp -f .gitignore.docroot .gitignore"
+          - type: :yaml_execute
+            environments: [local, dev, stage, preprod, prod]
+            commands:
+              - echo "test"
+              # - "composer install --prefer-dist --optimize-autoloader"
+              # - "if [[ -d vendor ]]; then find vendor -type d -name .git -exec rm -rf {} +; fi"
+              # - "if [[ -d docroot/modules/contrib ]]; then find docroot/modules/contrib -type d -name .git -exec rm -rf {} +; fi"
+              # - "if [[ -d docroot/themes/contrib ]]; then find docroot/themes/contrib -type d -name .git -exec rm -rf {} +; fi"
+              # - "if [[ -d docroot/libraries ]]; then find docroot/libraries -type d -name .git -exec rm -rf {} +; fi"
+
+deploy_targets:
+  local:
+    states:
+      development: local
+  striped:
+    states:
+      development: local
+  git_target:
+    states:
+      development: dev
+      staging: stage
+      stable: prod

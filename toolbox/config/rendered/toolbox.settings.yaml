@@ -1,0 +1,167 @@
+---
+config:
+  environments:
+    dev:
+      params:
+        config_context_prefix:
+        - dev
+    prod:
+      params:
+        config_context_prefix:
+        - prod
+  libraries:
+    cicd:
+      commands:
+        release:
+          build:
+            params:
+              cmd: release/build/build
+          deploy:
+            params:
+              cmd: release/deploy
+      component:
+        commands:
+          build:
+            params:
+              cmd: cicd/component/build
+              config_context_prefix:
+              - component
+              - build
+        params:
+          image: aroq/toolbox-cicd-build
+          source: github.com/aroq/toolbox-cicd-build
+          tool_dirs:
+          - toolbox/.toolbox/deps/toolbox-cicd-build
+      params:
+        config_context_prefix:
+        - cicd
+        destination: cicd
+        env:
+          TOOLBOX_DOCKER_SSH_FORWARD: true
+        image: aroq/variant-cicd
+        source: github.com/aroq/toolbox-cicd
+    params:
+      env:
+        TOOLBOX_DOCKER_SSH_FORWARD: false
+        TOOLBOX_RUN_VARIANT: true
+      image: aroq/toolbox
+      prefix: .toolbox
+      tool_dirs:
+      - toolbox/.toolbox/deps/toolbox
+    toolbox:
+      commands:
+        initialize:
+          params:
+            cmd: initialize
+        template:
+          params:
+            cmd: template
+        toolbox:
+          params:
+            cmd: toolbox
+        uniconf:
+          params:
+            cmd: uniconf
+      params:
+        destination: toolbox
+        source: github.com/aroq/toolbox//tools
+deps:
+  toolbox: github.com/aroq/toolbox?ref=develop
+  toolbox-cicd-build: github.com/aroq/toolbox-cicd-build?ref=master
+from_processed:
+- toolbox/.toolbox/deps/toolbox/config/toolbox.settings.yaml
+- toolbox/.toolbox/deps/toolbox-cicd-build/config/toolbox.settings.yaml
+- env:UNICONF
+- project:/toolbox/config/source/toolbox.settings.yaml
+- env:UNICONF
+sources:
+  env:
+    type: env
+  project:
+    path: ""
+    type: file
+tools:
+  cicd/component/build:
+    cmd: cicd/component/build
+    config_context_prefix:
+    - cicd
+    - component
+    - build
+    destination: cicd
+    env:
+      TOOLBOX_DOCKER_SSH_FORWARD: true
+      TOOLBOX_RUN_VARIANT: true
+    from: []
+    from_processed:
+    - config.libraries.cicd.component.commands.build
+    image: aroq/toolbox-cicd-build
+    prefix: .toolbox
+    source: github.com/aroq/toolbox-cicd-build
+    tool_dirs:
+    - toolbox/.toolbox/deps/toolbox
+    - toolbox/.toolbox/deps/toolbox-cicd-build
+  initialize:
+    cmd: initialize
+    destination: toolbox
+    env:
+      TOOLBOX_DOCKER_SSH_FORWARD: false
+      TOOLBOX_RUN_VARIANT: true
+    from_processed:
+    - config.libraries.toolbox.commands.initialize
+    image: aroq/toolbox
+    prefix: .toolbox
+    source: github.com/aroq/toolbox//tools
+    tool_dirs:
+    - toolbox/.toolbox/deps/toolbox
+  template:
+    cmd: template
+    destination: toolbox
+    env:
+      TOOLBOX_DOCKER_SSH_FORWARD: false
+      TOOLBOX_RUN_VARIANT: true
+    from_processed:
+    - config.libraries.toolbox.commands.template
+    image: aroq/toolbox
+    prefix: .toolbox
+    source: github.com/aroq/toolbox//tools
+    tool_dirs:
+    - toolbox/.toolbox/deps/toolbox
+  test:
+    cmd: test
+    env:
+      TOOLBOX_DOCKER_SSH_FORWARD: false
+      TOOLBOX_RUN_VARIANT: true
+    from: []
+    from_processed:
+    - config.libraries
+    image: aroq/toolbox
+    prefix: .toolbox
+    tool_dirs:
+    - toolbox/.toolbox/deps/toolbox
+  toolbox:
+    cmd: toolbox
+    destination: toolbox
+    env:
+      TOOLBOX_DOCKER_SSH_FORWARD: false
+      TOOLBOX_RUN_VARIANT: true
+    from_processed:
+    - config.libraries.toolbox.commands.toolbox
+    image: aroq/toolbox
+    prefix: .toolbox
+    source: github.com/aroq/toolbox//tools
+    tool_dirs:
+    - toolbox/.toolbox/deps/toolbox
+  uniconf:
+    cmd: uniconf
+    destination: toolbox
+    env:
+      TOOLBOX_DOCKER_SSH_FORWARD: false
+      TOOLBOX_RUN_VARIANT: true
+    from_processed:
+    - config.libraries.toolbox.commands.uniconf
+    image: aroq/toolbox
+    prefix: .toolbox
+    source: github.com/aroq/toolbox//tools
+    tool_dirs:
+    - toolbox/.toolbox/deps/toolbox
+
