@@ -3,6 +3,7 @@
 
 steps:
 - script: |
-    echo "test"
-    docman --version
+    docman init .docroot git@github.com:aroq/toolbox-docman-example.git
+    cd .docroot
+    docman build local development
 

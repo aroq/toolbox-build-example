@@ -1,7 +1,7 @@
 components:
   master:
-    root_repo: git@code.adyax.com:zebra/example-single-config-standalone.git
-    repo: git@code.adyax.com:zebra/example-single-config-standalone.git
+    root_repo: git@github.com:aroq/toolbox-docman-example.git
+    repo: git@github.com:aroq/toolbox-docman-example.git
     status: enabled
     type: root_chain
     root_repo_states:
@@ -32,13 +32,13 @@ components:
         after_execute:
           - type: :yaml_execute
             environments: [dev, stage, preprod, prod]
-            commands:
-              - "rm -f .gitignore"
-              - "cp -f .gitignore.docroot .gitignore"
+            # commands:
+              # - "rm -f .gitignore"
+              # - "cp -f .gitignore.docroot .gitignore"
           - type: :yaml_execute
             environments: [local, dev, stage, preprod, prod]
             commands:
-              - echo "test"
+              - git rev-parse --short HEAD > REVISION
               # - "composer install --prefer-dist --optimize-autoloader"
               # - "if [[ -d vendor ]]; then find vendor -type d -name .git -exec rm -rf {} +; fi"
               # - "if [[ -d docroot/modules/contrib ]]; then find docroot/modules/contrib -type d -name .git -exec rm -rf {} +; fi"
