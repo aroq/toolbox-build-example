@@ -1,13 +1,13 @@
 #!/usr/bin/env variant
 # vi: ft=yaml
 
+parameters:
+- name: working_dir
+  default: .docroot
+
 tasks:
-  deliverables:
+  init:
     parameters:
-    - name: repo
-      type: string
-    - name: state
-      type: string
     - name: user_email
       type: string
       default: "toolbox@toolbox.com"
@@ -20,7 +20,62 @@ tasks:
         cmd: |
           git config --global user.email "{{ .user_email }}"
           git config --global user.name "{{ .user_name }}"
-          docman init .docroot {{ .repo }} -f
-          cd .docroot
-          docman build git_target {{ .state }}
+
+          rm -fR {{ .working_dir }}
+          mkdir -p {{ .working_dir }}
+
+  repo:
+    script: |
+      git config --get remote.origin.url
+
+
+  deliverables:
+    parameters:
+    - name: repo
+      type: string
+    - name: source_branch
+      type: string
+    - name: target_branch
+      type: string
+    steps:
+    - task: utils.build.init
+
+    - task: core.exec
+      arguments:
+        cmd: |
+          git clone -b {{ .source_branch }} --single-branch --depth 1 {{ .repo }} {{ .working_dir }}/source
+          cd {{ .working_dir }}/source
+          git checkout {{ .source_branch }}
+
+    - task: core.exec
+      arguments:
+        cmd: |
+          cd {{ .working_dir }}/source
+          git rev-parse --short HEAD > REVISION
+
+    - task: core.exec
+      arguments:
+        cmd: |
+          git clone -b {{ .target_branch }} --single-branch --depth 1 {{ .repo }} {{ .working_dir }}/target
+          cd {{ .working_dir }}/target
+          git checkout {{ .target_branch }}
+
+    - task: core.exec
+      arguments:
+        cmd: |
+          cd {{ .working_dir }}/target
+          fd -H -I -E .git '^.*$' -d 1 --exec rm -rf {}
+          cd ../..
+          rsync -a --exclude '.git' {{ .working_dir }}/source/. {{ .working_dir }}/target
+
+    - task: core.exec
+      arguments:
+        cmd: |
+          cd {{ .working_dir }}/target
+          git add --all
+          git commit --allow-empty --quiet --no-verify -m "Deliverables update"
+          git pull origin {{ .target_branch }}
+          git push origin {{ .target_branch }}
+
+
 

@@ -8,21 +8,14 @@ tasks:
     tasks:
       build:
         import: toolbox/.toolbox/deps/toolbox-cicd-build/variant-lib/utils.yaml
-  build:
-    parameters:
-    - name: repo
-      type: string
-    tasks:
-      development:
-        steps:
-        - task: utils.build.deliverables
-          arguments:
-            repo: "{{ .repo }}"
-            state: development
-      staging:
-        steps:
-        - task: utils.build.deliverables
-          arguments:
-            repo: "{{ .repo }}"
-            state: staging
 
+  staging:
+    parameters:
+    - name: utils.build.repo
+      type: string
+    steps:
+    - task: utils.build.deliverables
+      arguments:
+        repo: "{{ .utils.build.repo }}"
+        source_branch: master
+        target_branch: deliverables_staging
