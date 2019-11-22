@@ -1,6 +1,12 @@
 #!/usr/bin/env variant
 # vi: ft=yaml
 
+parameters:
+- name: build
+  type: string
+  default: |
+    git rev-parse --short HEAD > REVISION;
+
 tasks:
   core:
     import: toolbox/.toolbox/deps/toolbox/variant-lib/utils.yaml
@@ -13,9 +19,11 @@ tasks:
     parameters:
     - name: utils.build.repo
       type: string
+      description: Current repo address
     steps:
     - task: utils.build.deliverables
       arguments:
         repo: "{{ .utils.build.repo }}"
         source_branch: master
         target_branch: deliverables_staging
+        build_cmd: "{{ .build }}"

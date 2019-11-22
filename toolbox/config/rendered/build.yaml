@@ -1,0 +1,14 @@
+---
+build: |
+  git rev-parse --short HEAD > REVISION;
+from_processed:
+- env:UNICONF
+- project:/toolbox/config/source/build.yaml
+- env:UNICONF
+sources:
+  env:
+    type: env
+  project:
+    path: ""
+    type: file
+
