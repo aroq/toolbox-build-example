@@ -15,15 +15,6 @@ tasks:
       build:
         import: toolbox/.toolbox/deps/toolbox-cicd-build/variant-lib/utils.yaml
 
-  staging:
-    parameters:
-    - name: utils.build.repo
-      type: string
-      description: Current repo address
-    steps:
-    - task: utils.build.deliverables
-      arguments:
-        repo: "{{ .utils.build.repo }}"
-        source_branch: master
-        target_branch: deliverables_staging
-        build_cmd: "{{ .build }}"
+steps:
+- script: git --version
+- task: utils.build.deliverables
