@@ -28,11 +28,34 @@ tasks:
     script: |
       git config --get remote.origin.url
 
+  branch:
+    script: |
+      git branch | grep \* | cut -d ' ' -f2
 
   deliverables:
     parameters:
+    - name: utils.build.repo
+      type: string
+      description: Current repo address
+    - name: utils.build.branch
+      type: string
+      description: Current repo address
+    - name: build
+      type: string
+      default: "pwd"
+    steps:
+    - task: utils.build.build
+      arguments:
+        repo: "{{ .utils.build.repo }}"
+        source_branch: "{{ .utils.build.branch }}"
+        target_branch: "deliverables_{{ .utils.build.branch }}"
+        buildd: "{{ .build }}"
+
+  build:
+    parameters:
     - name: repo
       type: string
+      default: "{{ .utils.build.repo }}"
     - name: source_branch
       type: string
     - name: target_branch
@@ -59,9 +82,9 @@ tasks:
     - task: core.exec
       arguments:
         cmd: |
-          git clone -b {{ .target_branch }} --single-branch --depth 1 {{ .repo }} {{ .working_dir }}/target;
+          git clone --depth 1 {{ .repo }} {{ .working_dir }}/target;
           cd {{ .working_dir }}/target;
-          git checkout {{ .target_branch }};
+          git checkout {{ .target_branch }} 2>/dev/null || (git checkout -b {{ .target_branch }}; git push origin {{ .target_branch }})
 
     - task: core.exec
       arguments:
