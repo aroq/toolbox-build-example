@@ -1,2 +1,3 @@
 build: |
-  git rev-parse --short HEAD > REVISION;
+  rm -f REVISION_SOURCE;
+  git rev-parse --short HEAD > REVISION_SOURCE;
