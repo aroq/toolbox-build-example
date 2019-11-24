@@ -4,8 +4,6 @@
 parameters:
 - name: build
   type: string
-  default: |
-    git rev-parse --short HEAD > REVISION;
 
 tasks:
   core:
@@ -15,6 +13,11 @@ tasks:
       build:
         import: toolbox/.toolbox/deps/toolbox-cicd-build/variant-lib/utils.yaml
 
-steps:
-- script: git --version
-- task: utils.build.deliverables
+  branch:
+    steps:
+    - task: utils.build.deliverables.branch
+
+  tag:
+    steps:
+    - task: utils.build.deliverables.tag
+
