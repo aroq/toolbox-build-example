@@ -17,8 +17,24 @@ include $(TOOLBOX_PROJECT)/$(TOOLBOX_DIR)/deps/toolbox/makefile/variant.include.
 include $(TOOLBOX_PROJECT)/$(TOOLBOX_DIR)/deps/toolbox/makefile/docker.include.mk
 
 ## Clean toolbox
-.PHONY : clean
-clean::
+.PHONY : toolbox/clean
+toolbox/clean::
 	@[ "$(TOOLBOX_PATH)" == '/' ] || \
 	 [ "$(TOOLBOX_PATH)" == '.' ] || \
 	   rm -fR $(TOOLBOX_PATH)
+
+.PHONY : toolbox/build
+toolbox/build: deps/install toolbox/cmd/create config/process
+
+.PHONY : deps/install
+deps/install:
+	TOOLBOX_DOCKER_SSH_FORWARD="true" toolbox/bin/toolbox deps install
+
+.PHONY : config/process
+config/process:
+	toolbox/bin/config process
+
+.PHONY : toolbox/cmd/create
+toolbox/cmd/create:
+	toolbox/bin/toolbox cmd create
+
