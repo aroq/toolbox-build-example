@@ -17,6 +17,7 @@ tasks:
     steps:
     - task: core.exec
       arguments:
+        title: Initialization
         cmd: |
           git config --global user.email "{{ .user_email }}"
           git config --global user.name "{{ .user_name }}"
@@ -26,11 +27,11 @@ tasks:
 
   repo:
     script: |
-      if [ -z ${GITLAB_CI_TOKEN_WRITE+x} ]; then
+      if [ -z ${TOOLBOX_GITLAB_CI_RW_USER_TOKEN+x} ]; then
         git config --get remote.origin.url
       else
         REPO_ADDRESS_ARRAY=(${CI_REPOSITORY_URL//@/ })
-        echo "https://${GITLAB_CI_USER_NAME}:${GITLAB_CI_TOKEN_WRITE}@${REPO_ADDRESS_ARRAY[1]}"
+        echo "https://${TOOLBOX_GITLAB_CI_RW_USER_NAME}:${TOOLBOX_GITLAB_CI_RW_USER_TOKEN}@${REPO_ADDRESS_ARRAY[1]}"
       fi
 
   branch:
@@ -107,6 +108,7 @@ tasks:
             steps:
             - task: core.exec
               arguments:
+                title: Prepare source
                 cmd: |
                   git clone -b {{ .source_ref }} --single-branch --depth 1 {{ .repo }} {{ .working_dir }}/source;
                   cd {{ .working_dir }}/source;
@@ -116,6 +118,7 @@ tasks:
             steps:
             - task: core.exec
               arguments:
+                title: Prepare target
                 cmd: |
                   git clone {{ .repo }} {{ .working_dir }}/target;
                   cd {{ .working_dir }}/target;
@@ -126,6 +129,7 @@ tasks:
         steps:
         - task: core.exec
           arguments:
+            title: Build in source dir
             cmd: |
               cd {{ .working_dir }}/source;
               {{ .build }}
@@ -134,6 +138,7 @@ tasks:
         steps:
         - task: core.exec
           arguments:
+            title: Copy from source dir to target dir
             cmd: |
               cd {{ .working_dir }}/target;
 
@@ -149,6 +154,7 @@ tasks:
         steps:
         - task: core.exec
           arguments:
+            title: "Push deliverables to the target branch \"{{ .target_ref }}\""
             cmd: |
               cd {{ .working_dir }}/target;
               # TODO: Check if there are any changes. No need to push if no changes.
@@ -162,6 +168,7 @@ tasks:
         steps:
         - task: core.exec
           arguments:
+            title: "Push deliverables to the target tag \"{{ .target_ref }}\""
             cmd: |
               cd {{ .working_dir }}/target;
               git tag "{{ .target_ref }}"

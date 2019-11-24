@@ -1,0 +1,4 @@
+---
+build: |
+  # Deliverables build procedure
+  rm -f REVISION_SOURCE; git rev-parse --short HEAD > REVISION_SOURCE;
