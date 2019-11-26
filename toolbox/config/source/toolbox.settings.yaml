@@ -6,15 +6,9 @@ from:
 - toolbox/.toolbox/deps/toolbox/config/toolbox.settings.yaml
 - toolbox/.toolbox/deps/toolbox-cicd-build/config/toolbox.settings.yaml
 
-config:
-  libraries:
-    cicd:
-      params:
-        env:
-          VARIANT_CONFIG_DIR: .
-      component:
-        commands:
-          build:
-            params:
-              config_context_prefix:
-              - .toolbox.build
+tools:
+  test:
+    from:
+    - config.libraries
+    cmd: test
+

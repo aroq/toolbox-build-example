@@ -1,0 +1,15 @@
+---
+build: |
+  # Deliverables build procedure
+  rm -f REVISION_SOURCE; git rev-parse --short HEAD > REVISION_SOURCE;
+from_processed:
+- env:UNICONF
+- project:/toolbox/config/source/build.yaml
+- env:UNICONF
+sources:
+  env:
+    type: env
+  project:
+    path: ""
+    type: file
+
