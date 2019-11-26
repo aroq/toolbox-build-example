@@ -1,0 +1,218 @@
+Version 0.1.9:
+ - Update tools settings for config
+
+Version 0.1.8:
+ - Add config tool
+
+Version 0.1.7:
+ - Change core exec func default title
+
+Version 0.1.6:
+ - Change core exec title func
+
+Version 0.1.5:
+ - Refactor toolbox
+ - Add toolbox dir to TOOLBOX_TOOL_DIRS
+ - Remove toolbox tool_dir
+ - Update cmd create task
+ - Reverse tool_dirs list
+ - Reverse tool_dirs list
+ - Reverse tool_dirs list
+ - Add tool_dirs param
+ - Change toolbox task import path
+ - Add tool_dirs param
+ - Change toolbox task import path
+ - Change config process task
+ - Update config process task
+ - Add fd tool
+ - Add .gitignore
+ - Update toolbox initialize task
+ - Update toolbox initialize task
+ - Update toolbox initialize task
+ - Update toolbox initialize task
+ - Update toolbox initialize task
+ - Update toolbox initialize task
+ - Update toolbox initialize task
+ - Update toolbox initialize task
+ - Update toolbox initialize task
+ - Update toolbox initialize task
+ - Update toolbox initialize task
+ - Update toolbox initialize task
+ - Update toolbox initialize task
+ - Update toolbox initialize task
+ - Update toolbox initialize task
+ - Update toolbox initialize task
+ - Update toolbox initialize task
+ - Update toolbox initialize task
+ - Update toolbox initialize task
+ - Update toolbox initialize task
+ - Update toolbox initialize task
+ - Update toolbox initialize task
+ - Update toolbox initialize task
+ - Update toolbox initialize task
+ - Update toolbox initialize task
+ - Update toolbox initialize task
+ - Update toolbox initialize task
+ - Update toolbox initialize task
+ - Update toolbox initialize task
+ - Update toolbox initialize task
+ - Update toolbox initialize task
+ - Update toolbox initialize task
+ - Update toolbox initialize task
+ - Update toolbox initialize task
+ - Update toolbox initialize task
+ - Update toolbox initialize task
+ - Update toolbox initialize task
+ - Update toolbox initialize task
+ - Update toolbox initialize task
+ - Update toolbox initialize task
+ - Update toolbox initialize task
+ - Update toolbox initialize task
+ - Update toolbox initialize task
+ - Update toolbox initialize task
+ - Update toolbox initialize task
+ - Update toolbox dir
+ - Add initialize process
+ - Update toolbox paths
+ - Add toolbox deps tasks
+ - Update config paths
+ - Update run template to work with config_context_prefix
+ - Change variant_config_context to config_context_prefix
+ - Make docker run in interactive mode
+ - Update config paths
+ - Update executable dir
+ - Update toolbox task
+ - Update config dir
+ - Update run script
+ - Change .toolbox.settings.yaml to toolbox.settings.yaml
+ - Change bin dir
+ - Update toolbox cmd
+ - Update utils
+ - Remove core context
+ - Add core variant context
+ - Remove core from contexts
+ - Update run template
+ - Update run template
+ - Update config
+ - Update utils
+ - Add config environments
+ - Update toolbox cmd create task to support multilevel cmd names
+ - Update toolbox cmd create task
+ - Update toolbox cmd create task
+ - Update template tool
+ - Update variant-lib, add core prefix to tasks
+ - Update VARIANT_CONFIG_CONTEXT handling in template
+ - Add VARIANT_CONFIG_CONTEXT process in run template
+ - Update config
+ - Add aws profile to config
+ - Update toolbox
+ - Add check for value in env var for bin/* template
+ - Add remove executables dir for toolbox cmd create task
+ - Add remove tmp dir for toolbox cmd create task
+ - Add uniconf process to toolbox cmd create task
+ - Rename task_name to tool_name for toolbox cmd show task
+ - Add TOOLBOX_* vars to be passed to docker image
+ - Add gpg task
+ - Add git-secret task to utils
+ - Add toolbox cmd show task
+ - Update toolbox tool list task
+ - Update toolbox cmd list task
+ - Update toolbox list task
+ - Fix toolbox list task
+ - Add comments for toolbox command
+ - Format toolbox install command
+ - Update toolbox install command
+ - Remove dive.log
+ - Update toolbox install command
+ - Update toolbox install command
+ - Fix tools install task
+ - Update install tools command
+ - Add install commands
+ - Add uniconf tool
+ - Revert "Format commands"
+ - Format commands
+ - Update exec task
+ - Add title for install cmd
+ - Change exec task
+ - Update toolbox task
+ - Update exec task
+ - Update exec task
+ - Add exec task
+ - Update template tool
+ - Add variant-lib
+ - Hide docker command output
+ - Add template tool config
+ - Add tools/template tool
+ - Add toolbox.cmd.list command
+ - Change jq filters to support destination field
+ - Change name to destination
+ - Add name for libraries
+ - Rename tools to libraries
+ - Change DOCKER_RUN_VOLUMES to DOCKER_RUN_MOUNT_VOLUME
+ - Add git-secret
+ - Fix Docker skip logic
+ - Update test project versions
+ - Fix readme
+
+Version 0.1.4:
+ - Update uniconf version to 0.1.7
+ - Update README about sample project
+ - Add test tool folder
+ - Formatting
+ - Add toolbox init task
+ - Move k6 config to toolbox-k6 repo
+
+Version 0.1.3:
+ - Refactor code
+
+Version 0.1.2:
+ - Update tools versions
+ - Fix SSH FORWARD for docker
+ - Add TOOLBOX_DOCKER_SSH_FORWARD env var
+ - Switch to aroq/toolbox:dev version
+ - Change toolbox image to aroq/toolbox:0.1.1
+ - Change vars retrieve image to aroq/toolbox:0.1.1
+ - Change vars retrieve image to aroq/toolbox:0.1.4
+
+Version 0.1.1:
+
+
+Version 0.1.0
+ - Move go-getter build our of this project
+ - Move uniconf build info uniconf project
+ - Fix default toolbox image name
+ - Update default toolbox tool settings
+ - Add default toolbox tool into settings
+ - Add toolbox test cmd
+ - Add README.md
+ - Add .toolbox.makefile.init init helper
+ - Formatting changes
+ - Rename TOOLBOX_RUN_DIRECT to TOOLBOX_DOCKER_SKIP
+ - Update TOOLBOX_RUN_DIRECT logic
+ - Updates
+ - Change TOOLBOX_RUN_DIRECT handling
+ - Refactor
+ - Update docker image to aroq/variant-cicd
+ - Update docker image to michaeltigr/zebra-build-php-drush-docman:0.0.107
+ - Change release build cmd
+ - Updates
+ - Refactor toolbox tasks
+ - Add toolbox cmd
+ - Add config dir
+ - Update deps init function
+ - Add uniconf tool
+ - Change IMAGE env var handling
+ - Update run wrapper
+ - Fix conflict
+ - Add gomplate
+ - Update .tools.settings yaml format
+ - Change 'deps' to tools in .toolbox.settings
+ - Trigger
+ - Trigger
+ - Trigger
+ - Add VERSION arg in dockerfile
+ - Add dockerfile
+ - Update install procedure
+ - Update install procedure
+ - Initial commit
+

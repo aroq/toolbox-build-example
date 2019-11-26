@@ -1,0 +1,11 @@
+#!/usr/bin/env variant
+# vi: ft=yaml
+
+tasks:
+  core:
+    import: toolbox/.toolbox/deps/toolbox/variant-lib/utils.yaml
+
+tasks:
+  process:
+    steps:
+    - task: core.config.process.dir

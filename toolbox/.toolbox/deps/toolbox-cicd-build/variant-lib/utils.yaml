@@ -1,0 +1,176 @@
+#!/usr/bin/env variant
+# vi: ft=yaml
+
+parameters:
+- name: working_dir
+  default: .docroot
+
+tasks:
+  init:
+    parameters:
+    - name: user_email
+      type: string
+      default: "toolbox@toolbox.com"
+    - name: user_name
+      type: string
+      default: "Toolbox"
+    steps:
+    - task: core.exec
+      arguments:
+        title: Initialization
+        cmd: |
+          git config --global user.email "{{ .user_email }}"
+          git config --global user.name "{{ .user_name }}"
+
+          rm -fR {{ .working_dir }}
+          mkdir -p {{ .working_dir }}
+
+  repo:
+    script: |
+      if [ -z ${TOOLBOX_GITLAB_CI_RW_USER_TOKEN+x} ]; then
+        git config --get remote.origin.url
+      else
+        REPO_ADDRESS_ARRAY=(${CI_REPOSITORY_URL//@/ })
+        echo "https://${TOOLBOX_GITLAB_CI_RW_USER_NAME}:${TOOLBOX_GITLAB_CI_RW_USER_TOKEN}@${REPO_ADDRESS_ARRAY[1]}"
+      fi
+
+  branch:
+    script: |
+      git symbolic-ref -q --short HEAD || git describe --tags --exact-match
+
+  deliverables:
+    parameters:
+    - name: utils.build.repo
+      type: string
+      description: Current repo address
+    - name: utils.build.branch
+      type: string
+      description: Current repo address
+    - name: build
+      type: string
+      default: "pwd"
+    tasks:
+      branch:
+        steps:
+        - task: utils.build.init
+        - task: utils.build.commands.prepare.source
+          arguments:
+            repo: "{{ .utils.build.repo }}"
+            source_ref: "{{ .utils.build.branch }}"
+        - task: utils.build.commands.prepare.target
+          arguments:
+            repo: "{{ .utils.build.repo }}"
+            target_ref: "deliverables_{{ .utils.build.branch }}"
+        - task: utils.build.commands.build
+        - task: utils.build.commands.copy_source_to_target
+        - task: utils.build.commands.push_target
+          arguments:
+            target_ref: "deliverables_{{ .utils.build.branch }}"
+
+      tag:
+        steps:
+        - task: utils.build.init
+        - task: utils.build.commands.prepare.source
+          arguments:
+            repo: "{{ .utils.build.repo }}"
+            source_ref: "{{ .utils.build.branch }}"
+        - task: utils.build.commands.prepare.target
+          arguments:
+            repo: "{{ .utils.build.repo }}"
+            target_ref: "deliverables_tags"
+        - task: utils.build.commands.build
+        - task: utils.build.commands.copy_source_to_target
+        - task: utils.build.commands.push_target
+          arguments:
+            target_ref: "deliverables_tags"
+        - task: utils.build.commands.push_tag
+          arguments:
+            target_ref: "stable--{{ .utils.build.branch }}"
+
+  commands:
+    parameters:
+    - name: repo
+      type: string
+      default: ""
+    - name: source_ref
+      type: string
+      default: ""
+    - name: target_ref
+      type: string
+      default: ""
+    - name: build
+      type: string
+      default: "pwd"
+    tasks:
+      prepare:
+        tasks:
+          source:
+            steps:
+            - task: core.exec
+              arguments:
+                title: Prepare source
+                cmd: |
+                  git clone -b {{ .source_ref }} --single-branch --depth 1 {{ .repo }} {{ .working_dir }}/source;
+                  cd {{ .working_dir }}/source;
+                  git checkout {{ .source_ref }};
+
+          target:
+            steps:
+            - task: core.exec
+              arguments:
+                title: Prepare target
+                cmd: |
+                  git clone {{ .repo }} {{ .working_dir }}/target;
+                  cd {{ .working_dir }}/target;
+                  git checkout {{ .target_ref }} 2>/dev/null || (git checkout -b {{ .target_ref }}; \
+                    git push origin {{ .target_ref }})
+
+      build:
+        steps:
+        - task: core.exec
+          arguments:
+            title: Build in source dir
+            cmd: |
+              cd {{ .working_dir }}/source;
+              {{ .build }}
+
+      copy_source_to_target:
+        steps:
+        - task: core.exec
+          arguments:
+            title: Copy from source dir to target dir
+            cmd: |
+              cd {{ .working_dir }}/target;
+
+              # Find all first level files & directories except ".git" and remove it
+              fd -H -I -E .git '^.*$' -d 1 --exec rm -rf {};
+
+              cd ../..;
+
+              # Copy all files except ".git" from source dir to target dir
+              rsync -a --exclude '.git' {{ .working_dir }}/source/. {{ .working_dir }}/target;
+
+      push_target:
+        steps:
+        - task: core.exec
+          arguments:
+            title: "Push deliverables to the target branch \"{{ .target_ref }}\""
+            cmd: |
+              cd {{ .working_dir }}/target;
+              # TODO: Check if there are any changes. No need to push if no changes.
+              git add --all;
+              git commit --allow-empty --quiet --no-verify -m "Deliverables update";
+              git pull origin {{ .target_ref }};
+              git push origin {{ .target_ref }};
+
+
+      push_tag:
+        steps:
+        - task: core.exec
+          arguments:
+            title: "Push deliverables to the target tag \"{{ .target_ref }}\""
+            cmd: |
+              cd {{ .working_dir }}/target;
+              git tag "{{ .target_ref }}"
+              git push origin {{ .target_ref }};
+

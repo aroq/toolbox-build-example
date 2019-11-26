@@ -1,0 +1,4 @@
+rsync
+ruby
+ruby-dev
+build-base

@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+if [ "${TOOLBOX_DEBUG}" == "true" ]; then
+  set -x
+fi
+
+
+export TOOLBOX_RUN_VARIANT=${TOOLBOX_RUN_VARIANT:-true}
+export DOCKER_ENV_VARS="-e TOOLBOX_DOCKER_SSH_FORWARD -e TOOLBOX_RUN_VARIANT"
+export TOOLBOX_TOOL_DIRS="toolbox,toolbox/.toolbox/deps/toolbox"
+
+export TOOLBOX_TOOL_DOCKER_IMAGE=${TOOLBOX_TOOL_DOCKER_IMAGE:-aroq/toolbox}
+
+
+eval "toolbox/.toolbox/deps/toolbox/run tools/uniconf $*"
+

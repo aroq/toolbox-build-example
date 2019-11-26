@@ -1,0 +1,20 @@
+#!/usr/bin/env variant
+# vi: ft=yaml
+#
+import: /usr/toolbox/deps/toolbox/variant-lib/utils.yaml
+
+description: Toolbox initialization
+
+steps:
+- task: exec
+  arguments:
+    title: Toolbox initialize
+    cmd: |
+      mkdir -p toolbox/.toolbox/deps/toolbox
+      rsync -r --ignore-existing /usr/toolbox/deps/toolbox toolbox/.toolbox/deps
+      rsync -r --ignore-existing toolbox/.toolbox/deps/toolbox/templates/boilerplate/. toolbox/
+- task: exec
+  arguments:
+    title: Toolbox initialize
+    cmd: |
+      toolbox/.toolbox/deps/toolbox/tools/toolbox cmd create

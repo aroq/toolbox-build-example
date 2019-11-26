@@ -1,0 +1,64 @@
+components:
+  master:
+    status: enabled
+    type: root_chain
+    root_repo_states:
+      development:
+        type: branch
+        version: deliverables_develop
+      staging:
+        type: branch
+        version: deliverables_staging
+      stable:
+        type: branch
+        version: deliverables_stable
+    states:
+      development:
+        type: branch
+        version: develop
+      staging:
+        type: branch
+        version: master
+      stable:
+        source:
+          type: :retrieve_from_repo
+          repo: :project_repo
+          branch: state_stable
+          file: info.yaml
+          
+deploy_targets:
+  local:
+    states:
+      development: local
+  striped:
+    states:
+      development: local
+  git_target:
+    states:
+      development: dev
+      staging: stage
+      stable: prod
+
+environments:
+  dev:
+    state: development
+    deploy_target: git_target
+
+  stage:
+    state: staging
+    deploy_target: git_target
+
+  preprod:
+    state: stable
+    deploy_target: git_target
+    tagger:
+      enabled: true
+      handler: :components
+
+  prod:
+    state: stable
+    deploy_target: git_target
+    tagger:
+      enabled: true
+      handler: :components
+

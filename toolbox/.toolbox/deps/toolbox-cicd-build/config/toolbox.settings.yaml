@@ -1,0 +1,25 @@
+config:
+  libraries:
+    cicd:
+      params:
+        config_context_prefix:
+        - cicd
+        env:
+          VARIANT_CONFIG_DIR: toolbox/config/rendered/
+      component:
+        params:
+          source: github.com/aroq/toolbox-cicd-build
+          image: aroq/toolbox-cicd-build
+          tool_dirs:
+          - toolbox/.toolbox/deps/toolbox-cicd-build
+        commands:
+          build:
+            params:
+              cmd: cicd/component/build
+              config_context_prefix:
+              - component
+              - build
+tools:
+  cicd/component/build:
+    from:
+    - config.libraries.cicd.component.commands.build

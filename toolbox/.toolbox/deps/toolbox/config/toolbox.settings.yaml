@@ -1,0 +1,67 @@
+config:
+  environments:
+    dev:
+      params:
+        config_context_prefix:
+        - dev
+    prod:
+      params:
+        config_context_prefix:
+        - prod
+
+  libraries:
+    params:
+      tool_dirs:
+        - toolbox/.toolbox/deps/toolbox
+      env:
+        VARIANT_LOG_LEVEL: info
+
+      prefix: .toolbox
+      image: aroq/toolbox
+      env:
+        TOOLBOX_RUN_VARIANT: true
+        TOOLBOX_DOCKER_SSH_FORWARD: false
+    toolbox:
+      params:
+        destination: toolbox
+        source: github.com/aroq/toolbox//tools
+      commands:
+        initialize:
+          params:
+            cmd: initialize
+        toolbox:
+          params:
+            cmd: toolbox
+        template:
+          params:
+            cmd: template
+        uniconf:
+          params:
+            cmd: uniconf
+    cicd:
+      params:
+        destination: cicd
+        source: github.com/aroq/toolbox-cicd
+        image: aroq/variant-cicd
+        env:
+          TOOLBOX_DOCKER_SSH_FORWARD: true
+      commands:
+        release:
+          build:
+            params:
+              cmd: release/build/build
+          deploy:
+            params:
+              cmd: release/deploy
+tools:
+  initialize:
+    from: config.libraries.toolbox.commands.initialize
+  toolbox:
+    from: config.libraries.toolbox.commands.toolbox
+  template:
+    from: config.libraries.toolbox.commands.template
+  uniconf:
+    from: config.libraries.toolbox.commands.uniconf
+  config:
+    from: config.libraries.toolbox.commands.config
+    cmd: config
