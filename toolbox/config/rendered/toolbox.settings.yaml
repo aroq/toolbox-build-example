@@ -69,7 +69,7 @@ config:
         source: github.com/aroq/toolbox//tools
 deps:
   toolbox: github.com/aroq/toolbox?ref=master
-  toolbox-cicd-build: github.com/aroq/toolbox-cicd-build?ref=master
+  toolbox-cicd-build: github.com/aroq/toolbox-cicd-build?ref=v0.1.1
 from_processed:
 - toolbox/.toolbox/deps/toolbox/config/toolbox.settings.yaml
 - toolbox/.toolbox/deps/toolbox-cicd-build/config/toolbox.settings.yaml

@@ -1,3 +1,27 @@
+Version 0.1.1:
+ - Remove unneeded file
+ - Fix gitlab ci token env var
+ - Update command titles
+ - Update gitlab get repo task
+ - Update build command
+ - Update branch name get procedure
+ - Update docker image
+ - Change default docker image
+ - Update build process
+ - Update working dir procedures
+ - Refactor build command
+ - Update build workflow
+ - Remove repo parameter
+ - Add rootfs & ssh config
+ - Force docman init
+ - Fix docman init
+ - Add config dir context
+ - Add utils
+ - Add docman
+ - Update build command
+ - Update image
+ - Add toolbox.settings.yaml
+
 Version 0.1.0
  - Initial commit
 
